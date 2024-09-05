@@ -7,25 +7,25 @@ def run_tutorial_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, run_first_level):
     clock = pygame.time.Clock()
     running = True
 
-    # Fonts
+    #Fonts
     normal_font = pygame.font.SysFont(None, 30)
     button_font = pygame.font.SysFont(None, 40)
     wallet_font = pygame.font.SysFont(None, 28, bold=True)
 
-    # Player settings
+    #Player Settings
     player_color = (0, 128, 255)
     player_size = 50
     player_x = SCREEN_WIDTH // 2
     player_y = SCREEN_HEIGHT - player_size
     player_velocity = 8
 
-    # Gravity & jumping
+    #Gravity
     gravity = 1
     jump_strength = -15
     player_velocity_y = 0
     is_jumping = False
 
-    # Item settings
+    #Item Settings
     item_color = (255, 0, 0)
     item_size = 30
     special_item = (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT - item_size)
@@ -33,27 +33,28 @@ def run_tutorial_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, run_first_level):
     collected_items = 0
     show_interact_e = False
 
-    # NEXT button settings
+    # NEXT Button
     button_text = "NEXT"
     button_rect = pygame.Rect(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, 140, 40)
     button_color = (0, 0, 0)
     show_button_e = False
 
-    # Instructions
+    #Instructions
     instructions = [
         "Use ARROW KEYS to move",
         "Press SPACE to jump",
-        "Press 'E' to interact and collect"
+        "Press 'E' to interact and collect",
+        "(You have to interact with next buttons)"
     ]
     float_offset = 0
 
-    # Fade settings
+    #Fade
     fade_alpha = 255
     fade_speed = 3
     fade_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     fade_surface.fill((0, 0, 0))
 
-    # Flag to trigger fade-out
+
     fade_out = False
 
     while running:
@@ -64,12 +65,12 @@ def run_tutorial_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, run_first_level):
 
         keys = pygame.key.get_pressed()
 
-        # Level skip (Broken)
+        #Level Skip (Broken)
         if keys[pygame.K_9]:
             run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tutorial_level)
             return
 
-        # Movement
+        #Movement
         moving = False
         if keys[pygame.K_LEFT]:
             player_x -= player_velocity
@@ -122,7 +123,7 @@ def run_tutorial_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, run_first_level):
         if player_rect.colliderect(button_rect):
             show_button_e = True
             if keys[pygame.K_e]:
-                fade_out = True  # Trigger fade-out
+                fade_out = True
 
         for idx, line in enumerate(instructions):
             draw_text(line, normal_font, (0, 0, 0), screen, SCREEN_WIDTH // 2, 50 + idx * 30 + float_offset, center=True)
@@ -132,13 +133,12 @@ def run_tutorial_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, run_first_level):
 
         draw_text("Wallet", wallet_font, (0, 0, 0), screen, 20, 10)
 
-        # Floating E when in proximity
+        #Floating E
         if show_interact_e:
             draw_text("E", button_font, (0, 0, 0), screen, player_x + player_size // 2, player_y - 20 + float_offset, center=True)
         if show_button_e:
             draw_text("E", button_font, (0, 0, 0), screen, button_rect.centerx, button_rect.centery - 40 + float_offset, center=True)
 
-        # Handle fade-out transition and move to the first level
         if fade_out:
             fade_alpha += fade_speed
             if fade_alpha >= 255:

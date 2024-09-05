@@ -28,7 +28,7 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
     enemy_size = 50
     enemy_x = SCREEN_WIDTH - 200  #Enemy Start
     enemy_y = SCREEN_HEIGHT - enemy_size
-    enemy_velocity = 2  #Smoother Tracking
+    enemy_velocity = 1.5  #Speed
     enemy_jump_strength = -7  #Jump Power
     enemy_velocity_y = 0
     enemy_is_jumping = False
