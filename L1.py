@@ -1,65 +1,65 @@
 import pygame
 import sys
 import math
+import L2  # Import the second level
+
 def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tutorial_level):
     clock = pygame.time.Clock()
     running = True
 
-    #Fonts
+    # Fonts
     normal_font = pygame.font.SysFont(None, 30)
     button_font = pygame.font.SysFont(None, 40)
     wallet_font = pygame.font.SysFont(None, 28, bold=True)
 
-    #Player Settings
+    # Player Settings
     player_color = (0, 128, 255)
     player_size = 50
-    player_x = 50  #Player Start
+    player_x = 50  # Player Start
     player_y = SCREEN_HEIGHT - player_size
     player_velocity = 8
 
-    #Gravity
+    # Gravity
     gravity = 1
     jump_strength = -15
     player_velocity_y = 0
     is_jumping = False
 
-    #Enemy Settings
+    # Enemy Settings
     enemy_color = (255, 255, 0)
     enemy_size = 50
-    enemy_x = SCREEN_WIDTH - 200  #Enemy Start
+    enemy_x = SCREEN_WIDTH - 200
     enemy_y = SCREEN_HEIGHT - enemy_size
-    enemy_velocity = 1.5  #Speed
-    enemy_jump_strength = -7  #Jump Power
+    enemy_velocity = 1.5
+    enemy_jump_strength = -1
     enemy_velocity_y = 0
     enemy_is_jumping = False
 
-    #Red Cube
+    # Red Cube
     item_color = (255, 0, 0)
     item_size = 30
     special_item = (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT - item_size)
     items = [special_item]
     show_interact_e = False
 
-    #Next Button
+    # Next Button
     button_text = "NEXT"
     button_rect = pygame.Rect(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, 140, 40)
     button_color = (0, 0, 0)
     show_button_e = False
 
-    #Empty Effect
-    effect_color = (100, 100, 100)
-    effect_duration = 5
-
-    #Fading
-    fade_alpha = 255
+    # Fading
+    fade_alpha = 255  # Start fully opaque (for fade-in)
     fade_speed = 3
     fade_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     fade_surface.fill((0, 0, 0))
+    fading_in = True
+    fading_out = False
 
-    #Death Cutscene
+    # Death Cutscene
     death_cutscene_running = False
 
-    #Instrucitons
+    # Instructions
     instructions = [
         "Watch Out!!",
         "The Yellow cubes will try",
@@ -83,7 +83,7 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
             pygame.quit()
             sys.exit()
 
-        #Player movement
+        # Player movement
         moving = False
         if keys[pygame.K_LEFT]:
             player_x -= player_velocity
@@ -107,7 +107,7 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
         if moving:
             pygame.draw.line(
                 screen,
-                effect_color,
+                (100, 100, 100),  # The line color
                 (player_x, player_y + player_size),
                 (player_x + player_size, player_y + player_size + 10),
                 3
@@ -117,22 +117,22 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
         player_rect = pygame.Rect(player_x, player_y, player_size, player_size)
         pygame.draw.rect(screen, player_color, player_rect)
 
-        #Yellow Enemy
+        # Yellow Enemy
         enemy_rect = pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size)
         pygame.draw.rect(screen, enemy_color, enemy_rect)
 
-        #Enemy Tracking
+        # Enemy Tracking
         if enemy_x < player_x:
             enemy_x += enemy_velocity
         elif enemy_x > player_x:
             enemy_x -= enemy_velocity
 
-        #Make the enemy jump when it reaches the player
+        # Make the enemy jump when it reaches the player
         if player_y < enemy_y and not enemy_is_jumping:
             enemy_velocity_y = enemy_jump_strength
             enemy_is_jumping = True
 
-        #Enemy Gravity
+        # Enemy Gravity
         enemy_velocity_y += gravity
         enemy_y += enemy_velocity_y
 
@@ -141,11 +141,11 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
             enemy_velocity_y = 0
             enemy_is_jumping = False
 
-        #Enemy Detection
+        # Enemy Detection
         if player_rect.colliderect(enemy_rect):
             death_cutscene_running = True
 
-        #Interaction
+        # Interaction
         show_interact_e = False
         for item_x, item_y in items[:]:
             item_rect = pygame.Rect(item_x, item_y, item_size, item_size)
@@ -156,37 +156,48 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
                     items.remove((item_x, item_y))
                     collected_items += 1
 
-        #Next Button
+        # Next Button
         show_button_e = False
         pygame.draw.rect(screen, button_color, button_rect)
         draw_text(button_text, button_font, (255, 255, 255), screen, button_rect.centerx, button_rect.centery, center=True)
 
         if player_rect.colliderect(button_rect):
             show_button_e = True
-            if keys[pygame.K_e]:
-                run_tutorial_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, run_first_level)
+            if keys[pygame.K_e] and not fading_out and not fading_in:
+                fading_out = True  # Start fade out
 
-        #Collected Cubes
+        if fading_in:
+            fade_alpha -= fade_speed  # Fade in (decrease alpha)
+            if fade_alpha <= 0:
+                fade_alpha = 0
+                fading_in = False  # Fade-in complete
+
+        if fading_out:
+            fade_alpha += fade_speed  # Fade out (increase alpha)
+            if fade_alpha >= 255:  # Once the screen is fully black, load the next level
+                running = False
+                L2.run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items)  # Load next level
+
+        # Collected Cubes
         for i in range(collected_items):
             pygame.draw.rect(screen, item_color, (10 + 25 * i, 40, 20, 20))
 
         draw_text("Wallet", wallet_font, (0, 0, 0), screen, 20, 10)
 
-        #Floating "E"
+        # Floating "E"
         if show_interact_e:
             draw_text("E", button_font, (0, 0, 0), screen, player_x + player_size // 2, player_y - 20, center=True)
         if show_button_e:
             draw_text("E", button_font, (0, 0, 0), screen, button_rect.centerx, button_rect.centery - 40, center=True)
 
-        #Display Instructions
+        # Display Instructions
         float_offset = 10 * math.sin(pygame.time.get_ticks() / 500)
         for idx, line in enumerate(instructions):
             draw_text(line, normal_font, (0, 0, 0), screen, SCREEN_WIDTH // 2, 50 + idx * 30 + float_offset, center=True)
 
-        if fade_alpha > 0:
-            fade_alpha -= fade_speed
-            fade_surface.set_alpha(fade_alpha)
-            screen.blit(fade_surface, (0, 0))
+        # Fading Effect
+        fade_surface.set_alpha(fade_alpha)
+        screen.blit(fade_surface, (0, 0))
 
         pygame.display.update()
         clock.tick(30)
