@@ -1,16 +1,7 @@
+#Assets section.
 import pygame
-#Chat GPT code Some stuff is based off of.
 
-def draw_text(text, font, color, surface, x, y, center=False):
-    """Draws text on the given surface at the specified position, with optional centering."""
-    text_obj = font.render(text, True, color)
-    text_rect = text_obj.get_rect(center=(x, y) if center else (0, 0))
-    if not center:
-        text_rect.topleft = (x, y)
-    surface.blit(text_obj, text_rect)
-
-
-class FloatingText:
+class FloatingText: # ChatGPT. Somewhat used as a base
     """Displays floating text with a fade-out effect over a specified duration."""
 
     def __init__(self, text, font, color, screen, x, y, duration):
@@ -24,14 +15,17 @@ class FloatingText:
         self.duration = duration * 60  # Duration in frames (assuming 60 FPS)
         self.frame_count = 0
 
-    def update(self):
+    def update(self): # Fading
         """Updates the text's alpha value to create a fading effect."""
         self.frame_count += 1
         if self.frame_count >= self.duration:
             self.alpha = max(0, self.alpha - 5)
 
-    def draw(self):
-        """Renders the text on the screen with the current alpha value."""
-        text_surface = self.font.render(self.text, True, self.color)
-        text_surface.set_alpha(self.alpha)
-        self.screen.blit(text_surface, (self.x - text_surface.get_width() // 2, self.y))
+#unused sword code
+def draw_sword(screen, x, y, hilt_width, hilt_height, blade_length, blade_color, hilt_color):
+    """ Draws a simple pixelated sword using rectangles and lines. """
+    # Draw the blade (gray)
+    pygame.draw.rect(screen, blade_color, (x + hilt_width // 2 - 2, y, 4, blade_length))  # Thin blade
+
+     Draw the hilt (brown)
+    pygame.draw.rect(screen, hilt_color, (x, y + blade_length, hilt_width, hilt_height))  # Handle

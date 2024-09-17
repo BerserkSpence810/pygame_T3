@@ -127,7 +127,7 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
         elif enemy_x > player_x:
             enemy_x -= enemy_velocity
 
-        # Make the enemy jump when it reaches the player
+        # Nil jump for yellow enemy
         if player_y < enemy_y and not enemy_is_jumping:
             enemy_velocity_y = enemy_jump_strength
             enemy_is_jumping = True

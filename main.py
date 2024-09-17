@@ -43,7 +43,7 @@ def main_menu(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
                 if play_button.collidepoint(event.pos):
                     fade_to_black = True
                 elif assets_button.collidepoint(event.pos):
-                    print("Assets button clicked!")
+                    print("All assets used are at utils.py couldn't finish the button")
                 elif exit_button.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
@@ -88,8 +88,8 @@ def cutscene(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
 
     storyline = [
         "Long ago, the Blue squares discovered",
-        "the rare and sought-after Red squares.",
-        "These Red squares hold immense value.",
+        "the rare and sought for Red squares.",
+        "These Red squares have immense value.",
         "Your mission is to collect them and",
         "raise money to pay off your crippling debt",
         "from buying a house."
@@ -118,7 +118,6 @@ def cutscene(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
             if event.type == pygame.MOUSEBUTTONDOWN and text_completed:
                 if continue_button.collidepoint(event.pos):
                     fade_out = True
-
         if not text_completed:
             current_time = time.time()
             if current_time - text_start_time > text_speed:
