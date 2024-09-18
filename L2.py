@@ -21,15 +21,15 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     player_attack_cooldown = 0  # Cooldown timer for sword attack
 
     # Sword (drawn with Pygame)
-    sword_color = (169, 169, 169)
-    sword_hilt_color = (139, 69, 19)
-    sword_blade_length = 30
-    sword_hilt_width = 15
-    sword_hilt_height = 10
-    sword_x = SCREEN_WIDTH // 4
-    sword_y = SCREEN_HEIGHT - player_size - 60
-    sword_picked_up = False
-    sword_rect = pygame.Rect(sword_x, sword_y, sword_hilt_width, sword_blade_length + sword_hilt_height)
+    # sword_color = (169, 169, 169)
+    # sword_hilt_color = (139, 69, 19)
+    # sword_blade_length = 30
+    # sword_hilt_width = 15
+    # sword_hilt_height = 10
+    # sword_x = SCREEN_WIDTH // 4
+    # sword_y = SCREEN_HEIGHT - player_size - 60
+    # sword_picked_up = False
+    # sword_rect = pygame.Rect(sword_x, sword_y, sword_hilt_width, sword_blade_length + sword_hilt_height)
 
     # Gravity
     gravity = 1
@@ -39,7 +39,7 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
 
     # Enemy Settings (Green Cube)
     green_cube_color = (0, 255, 0)
-    green_cube_size = 100
+    green_cube_size = 80
     green_cube_x = SCREEN_WIDTH -200
     green_cube_y = SCREEN_HEIGHT - green_cube_size
     green_cube_velocity = 2
@@ -48,14 +48,14 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     #red cube
     item_colour = (255, 0, 0)
     item_size = 30
-    special_item = (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT - item_size)
+    special_item = (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - item_size)
     items = [special_item]
     show_interact_e = False
     red_cube_dropped = False
     red_cube_rect = None
 
 
-    # Platform for green cube
+    # Platform
     platform_color = (100, 100, 100)
     platform_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 100, 200, 20)
 
@@ -111,25 +111,25 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
 
         player_rect = pygame.Rect(player_x, player_y, player_size, player_size)
 
-        # Sword Pickup
-        if not sword_picked_up and player_rect.colliderect(sword_rect):
-            if keys[pygame.K_e]:
-                sword_picked_up = True
-                player_has_sword = True
-
-        # Sword Swing (Attack keybind)
-        if player_has_sword and keys[pygame.K_RETURN] and player_attack_cooldown == 0:
-            # Perform attack animation (short duration of swing)
-            player_attack_cooldown = 15  # Cooldown for attack
-            sword_swing_rect = pygame.Rect(player_x + player_size, player_y, 80, 20)  # Sword swing hitbox
-
-            # Check if the sword hit the green cube
-            green_cube_rect = pygame.Rect(green_cube_x, green_cube_y, green_cube_size, green_cube_size)
-            if green_cube_alive and sword_swing_rect.colliderect(green_cube_rect):
-                # Kill the green cube and drop a red cube
-                green_cube_alive = False
-                red_cube_rect = pygame.Rect(green_cube_x, green_cube_y, item_size, item_size)
-                red_cube_dropped = True
+        # # Sword Pickup
+        # if not sword_picked_up and player_rect.colliderect(sword_rect):
+        #     if keys[pygame.K_e]:
+        #         sword_picked_up = True
+        #         player_has_sword = True
+        #
+        # # Sword Swing (Attack keybind)
+        # if player_has_sword and keys[pygame.K_RETURN] and player_attack_cooldown == 0:
+        #     # Perform attack animation (short duration of swing)
+        #     player_attack_cooldown = 15  # Cooldown for attack
+        #     sword_swing_rect = pygame.Rect(player_x + player_size, player_y, 80, 20)  # Sword swing hitbox
+        #
+        #     # Check if the sword hit the green cube
+        #     green_cube_rect = pygame.Rect(green_cube_x, green_cube_y, green_cube_size, green_cube_size)
+        #     if green_cube_alive and sword_swing_rect.colliderect(green_cube_rect):
+        #         # Kill the green cube and drop a red cube
+        #         green_cube_alive = False
+        #         red_cube_rect = pygame.Rect(green_cube_x, green_cube_y, item_size, item_size)
+        #         red_cube_dropped = True
 
         # Platform Collision
         if player_rect.colliderect(platform_rect):
@@ -141,8 +141,10 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
                 player_velocity_y = gravity
 
         # Green cube movement (enemy)
-        if green_cube_alive:
+        if green_cube_x < player_x:
             green_cube_x += green_cube_velocity
+        elif green_cube_x > player_x:
+            green_cube_x -= green_cube_velocity
             #if green_cube_x <= platform_rect.left or green_cube_x + green_cube_size >= platform_rect.right:
                 #green_cube_velocity = -green_cube_velocity
 
@@ -165,9 +167,9 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
             green_cube_rect = pygame.Rect(green_cube_x, green_cube_y, green_cube_size, green_cube_size)
             pygame.draw.rect(screen, green_cube_color, green_cube_rect)
 
-        # Red cube (if green cube was killed)
-        if red_cube_dropped:
-            pygame.draw.rect(screen, item_colour, red_cube_rect)
+        # # Red cube (if green cube was killed)
+        # if red_cube_dropped:
+        #     pygame.draw.rect(screen, item_colour, red_cube_rect)
 
         # Check if player picks up the red cube
         show_interact_e = False

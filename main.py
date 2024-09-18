@@ -20,8 +20,8 @@ def main_menu(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
     fade_to_black = False
     fade_alpha = 0
 
-    pygame.mixer.music.load('main.mp3')
-    pygame.mixer.music.play(-1)  # Loop indefinitely
+    #pygame.mixer.music.load('main.mp3')
+    #pygame.mixer.music.play(-1)  # Loop indefinitely
 
     title_font = pygame.font.SysFont(None, 80)
     button_font = pygame.font.SysFont(None, 50)

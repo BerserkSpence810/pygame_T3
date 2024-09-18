@@ -22,10 +22,10 @@ class FloatingText: # ChatGPT. Somewhat used as a base
             self.alpha = max(0, self.alpha - 5)
 
 #unused sword code
-def draw_sword(screen, x, y, hilt_width, hilt_height, blade_length, blade_color, hilt_color):
-    """ Draws a simple pixelated sword using rectangles and lines. """
-    # Draw the blade (gray)
-    pygame.draw.rect(screen, blade_color, (x + hilt_width // 2 - 2, y, 4, blade_length))  # Thin blade
-
-     Draw the hilt (brown)
-    pygame.draw.rect(screen, hilt_color, (x, y + blade_length, hilt_width, hilt_height))  # Handle
+# def draw_sword(screen, x, y, hilt_width, hilt_height, blade_length, blade_color, hilt_color):
+#     """ Draws a simple pixelated sword using rectangles and lines. """
+#     # Draw the blade (gray)
+#     pygame.draw.rect(screen, blade_color, (x + hilt_width // 2 - 2, y, 4, blade_length))  # Thin blade
+#
+#      Draw the hilt (brown)
+#     pygame.draw.rect(screen, hilt_color, (x, y + blade_length, hilt_width, hilt_height))  # Handle
