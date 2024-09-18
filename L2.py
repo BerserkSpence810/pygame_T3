@@ -1,7 +1,7 @@
 import pygame
 import sys
 import math
-import L1
+import L3
 def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     clock = pygame.time.Clock()
     running = True
@@ -42,7 +42,7 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     green_cube_size = 80
     green_cube_x = SCREEN_WIDTH -200
     green_cube_y = SCREEN_HEIGHT - green_cube_size
-    green_cube_velocity = 2
+    green_cube_velocity = 1
     green_cube_alive = True
 
     #red cube
@@ -59,18 +59,18 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     platform_color = (100, 100, 100)
     platform_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 100, 200, 20)
 
+    # Next Button
+    button_text = "NEXT"
+    button_rect = pygame.Rect(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, 140, 40)
+    button_color = (0, 0, 0)
+    show_button_e = False
+
     # Fading
     fade_alpha = 255  # Start fully black
     fade_speed = 3
     fade_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     fade_surface.fill((0, 0, 0))
     fading_out = False
-
-    # Next Button
-    button_text = "NEXT"
-    button_rect = pygame.Rect(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, 140, 40)
-    button_color = (0, 0, 0)
-    show_button_e = False
 
     # Instructions
     instructions = [
@@ -148,6 +148,37 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
             #if green_cube_x <= platform_rect.left or green_cube_x + green_cube_size >= platform_rect.right:
                 #green_cube_velocity = -green_cube_velocity
 
+        # Interaction
+        show_interact_e = False
+        for item_x, item_y in items[:]:
+            item_rect = pygame.Rect(item_x, item_y, item_size, item_size)
+            pygame.draw.rect(screen, item_colour, item_rect)
+            if player_rect.colliderect(item_rect):
+                show_interact_e = True
+                if keys[pygame.K_e]:
+                    items.remove((item_x, item_y))
+                    collected_items += 1
+
+        # Next Button
+        show_button_e = False
+        pygame.draw.rect(screen, button_color, button_rect)
+        draw_text(button_text, button_font, (255, 255, 255), screen, button_rect.centerx, button_rect.centery, center=True)
+
+        if player_rect.colliderect(button_rect):
+            show_button_e = True
+            if keys[pygame.K_e] and not fading_out:
+                fading_out = True  # Start fade out
+
+        if fading_out:
+            fade_alpha += fade_speed
+            if fade_alpha >= 255:
+                fade_alpha = 255
+                L3.run_third_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items)
+                return
+            fade_surface.set_alpha(fade_alpha)
+            screen.blit(fade_surface, (0, 0))
+
+
         # Drawing objects
         screen.fill((255, 255, 255))
 
@@ -170,6 +201,8 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
         # # Red cube (if green cube was killed)
         # if red_cube_dropped:
         #     pygame.draw.rect(screen, item_colour, red_cube_rect)
+
+
 
         # Check if player picks up the red cube
         show_interact_e = False
@@ -194,6 +227,11 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
         if show_button_e:
             draw_text("E", button_font, (0, 0, 0), screen, button_rect.centerx, button_rect.centery - 40, center=True)
 
+        # Display Instructions
+        float_offset = 10 * math.sin(pygame.time.get_ticks() / 500)
+        for idx, line in enumerate(instructions):
+            draw_text(line, normal_font, (0, 0, 0), screen, SCREEN_WIDTH // 2, 50 + idx * 30 + float_offset, center=True)
+
         # Death sequence if killed by cube
         if not green_cube_alive and player_rect.colliderect(green_cube_rect):
             # "You got robbed" scene
@@ -210,6 +248,8 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
             fade_alpha -= fade_speed
             fade_surface.set_alpha(fade_alpha)
             screen.blit(fade_surface, (0, 0))
+        fade_surface.set_alpha(fade_alpha)
+        screen.blit(fade_surface, (0, 0))
 
         # Handle attack cooldown
         if player_attack_cooldown > 0:
