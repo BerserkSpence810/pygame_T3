@@ -12,10 +12,10 @@ class FloatingText: # ChatGPT. Somewhat used as a base
         self.x = x
         self.y = y
         self.alpha = 255
-        self.duration = duration * 60  # Duration in frames (assuming 60 FPS)
+        self.duration = duration * 60
         self.frame_count = 0
 
-    def update(self): # Fading
+    def update(self):
         """Updates the text's alpha value to create a fading effect."""
         self.frame_count += 1
         if self.frame_count >= self.duration:

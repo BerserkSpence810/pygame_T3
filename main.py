@@ -1,3 +1,5 @@
+#All assets that isn't my own is in utils.py
+
 import pygame
 import sys
 import time
