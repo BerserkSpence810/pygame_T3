@@ -5,7 +5,7 @@ import sys
 import time
 import math
 from tutorial_level import run_tutorial_level
-from L1 import run_first_level  # Corrected function import
+from L1 import run_first_level
 
 def draw_text(text, font, color, surface, x, y, center=False):
     textobj = font.render(text, True, color)
@@ -33,8 +33,7 @@ def main_menu(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
     button_width = 200
     button_height = 50
     play_button = pygame.Rect(SCREEN_WIDTH // 2 - button_width // 2, SCREEN_HEIGHT // 2, button_width, button_height)
-    assets_button = pygame.Rect(SCREEN_WIDTH // 2 - button_width // 2, SCREEN_HEIGHT // 2 + 60, button_width, button_height)
-    exit_button = pygame.Rect(SCREEN_WIDTH // 2 - button_width // 2, SCREEN_HEIGHT // 2 + 120, button_width, button_height)
+    exit_button = pygame.Rect(SCREEN_WIDTH // 2 - button_width // 2, SCREEN_HEIGHT // 2 + 60, button_width, button_height)
 
     while menu_running:
         for event in pygame.event.get():
@@ -44,8 +43,6 @@ def main_menu(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.collidepoint(event.pos):
                     fade_to_black = True
-                elif assets_button.collidepoint(event.pos):
-                    print("All assets used are at utils.py couldn't finish the button")
                 elif exit_button.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
@@ -67,11 +64,7 @@ def main_menu(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
         pygame.draw.rect(screen, (0, 0, 0), play_button)
         draw_text("PLAY", button_font, (255, 255, 255), screen, play_button.centerx, play_button.centery, center=True)
 
-        assets_button.y = SCREEN_HEIGHT // 2 + 60 + float_offset
-        pygame.draw.rect(screen, (0, 0, 0), assets_button)
-        draw_text("ASSETS", button_font, (255, 255, 255), screen, assets_button.centerx, assets_button.centery, center=True)
-
-        exit_button.y = SCREEN_HEIGHT // 2 + 120 + float_offset
+        exit_button.y = SCREEN_HEIGHT // 2 + 60 + float_offset
         pygame.draw.rect(screen, (0, 0, 0), exit_button)
         draw_text("EXIT GAME", button_font, (255, 255, 255), screen, exit_button.centerx, exit_button.centery, center=True)
 

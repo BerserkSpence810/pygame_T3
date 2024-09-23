@@ -1,13 +1,12 @@
 import pygame
 import sys
 import math
-import L2  # Import the second level
+import L2
 
 def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tutorial_level):
     clock = pygame.time.Clock()
     running = True
 
-    # Fonts
     normal_font = pygame.font.SysFont(None, 30)
     button_font = pygame.font.SysFont(None, 40)
     wallet_font = pygame.font.SysFont(None, 28, bold=True)
@@ -25,7 +24,7 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
     player_velocity_y = 0
     is_jumping = False
 
-    # Enemy Settings
+    # Yellow Enemy Settings
     enemy_color = (255, 255, 0)
     enemy_size = 50
     enemy_x = SCREEN_WIDTH - 200
@@ -49,14 +48,14 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
     show_button_e = False
 
     # Fading
-    fade_alpha = 255  # Start fully opaque (for fade-in)
+    fade_alpha = 255
     fade_speed = 3
     fade_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     fade_surface.fill((0, 0, 0))
     fading_in = True
     fading_out = False
 
-    # Death Cutscene
+    # Death
     death_cutscene_running = False
 
     # Instructions
@@ -107,7 +106,7 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
         if moving:
             pygame.draw.line(
                 screen,
-                (100, 100, 100),  # The line color
+                (100, 100, 100),
                 (player_x, player_y + player_size),
                 (player_x + player_size, player_y + player_size + 10),
                 3
@@ -126,13 +125,9 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
             enemy_x += enemy_velocity
         elif enemy_x > player_x:
             enemy_x -= enemy_velocity
-
-        # Nil jump for yellow enemy
         if player_y < enemy_y and not enemy_is_jumping:
             enemy_velocity_y = enemy_jump_strength
             enemy_is_jumping = True
-
-        # Enemy Gravity
         enemy_velocity_y += gravity
         enemy_y += enemy_velocity_y
 
@@ -164,19 +159,19 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
         if player_rect.colliderect(button_rect):
             show_button_e = True
             if keys[pygame.K_e] and not fading_out and not fading_in:
-                fading_out = True  # Start fade out
+                fading_out = True
 
         if fading_in:
-            fade_alpha -= fade_speed  # Fade in (decrease alpha)
+            fade_alpha -= fade_speed
             if fade_alpha <= 0:
                 fade_alpha = 0
-                fading_in = False  # Fade-in complete
+                fading_in = False
 
         if fading_out:
-            fade_alpha += fade_speed  # Fade out (increase alpha)
-            if fade_alpha >= 255:  # Once the screen is fully black, load the next level
+            fade_alpha += fade_speed
+            if fade_alpha >= 255:
                 running = False
-                L2.run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items)  # Load next level
+                L2.run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items)
 
         # Collected Cubes
         for i in range(collected_items):
@@ -184,7 +179,6 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
 
         draw_text("Wallet", wallet_font, (0, 0, 0), screen, 20, 10)
 
-        # Floating "E"
         if show_interact_e:
             draw_text("E", button_font, (0, 0, 0), screen, player_x + player_size // 2, player_y - 20, center=True)
         if show_button_e:

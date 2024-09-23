@@ -7,7 +7,6 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     clock = pygame.time.Clock()
     running = True
 
-    # Fonts
     normal_font = pygame.font.SysFont(None, 30)
     button_font = pygame.font.SysFont(None, 40)
     wallet_font = pygame.font.SysFont(None, 28, bold=True)
@@ -18,8 +17,6 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     player_x = 50  # Player Start
     player_y = SCREEN_HEIGHT - player_size
     player_velocity = 8
-    player_has_sword = False
-    player_attack_cooldown = 0  # Cooldown timer for sword attack
 
     # Gravity
     gravity = 1
@@ -27,7 +24,7 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     player_velocity_y = 0
     is_jumping = False
 
-    # Enemy Settings (Green Cube)
+    # Green Enemy Settings
     green_cube_color = (0, 255, 0)
     green_cube_size = 70
     green_cube_x = SCREEN_WIDTH - 200
@@ -55,7 +52,7 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     show_button_e = False
 
     # Fading
-    fade_alpha = 255  # Start fully opaque (for fade-in)
+    fade_alpha = 255
     fade_speed = 3
     fade_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     fade_surface.fill((0, 0, 0))
@@ -99,13 +96,12 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
             player_velocity_y = 0
             is_jumping = False
 
-        # Green cube movement (enemy)
+        # Enemy movement
         if green_cube_x < player_x:
             green_cube_x += green_cube_velocity
         elif green_cube_x > player_x:
             green_cube_x -= green_cube_velocity
 
-        # Drawing objects
         screen.fill((255, 255, 255))
 
         # Player
@@ -121,7 +117,7 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
             elif player_y + player_size > platform_rect.bottom:
                 player_velocity_y = gravity
 
-        # Interaction with items
+        # Interaction
         show_interact_e = False
         for item_x, item_y in items[:]:
             item_rect = pygame.Rect(item_x, item_y, item_size, item_size)
@@ -140,16 +136,14 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
         if player_rect.colliderect(button_rect):
             show_button_e = True
             if keys[pygame.K_e] and not fading_out:
-                fading_out = True  # Start fade out
+                fading_out = True
 
-        # Fade-in logic
         if fading_in:
-            fade_alpha -= fade_speed  # Fade in (decrease alpha)
+            fade_alpha -= fade_speed
             if fade_alpha <= 0:
                 fade_alpha = 0
-                fading_in = False  # Fade-in complete
+                fading_in = False
 
-        # Fade-out logic
         if fading_out:
             fade_alpha += fade_speed
             if fade_alpha >= 255:
@@ -157,7 +151,6 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
                 L3.run_third_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items)
                 return
 
-        # Apply fading effect
         if fade_alpha > 0:
             fade_surface.set_alpha(fade_alpha)
             screen.blit(fade_surface, (0, 0))
@@ -177,7 +170,7 @@ def run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
         # Platform
         pygame.draw.rect(screen, platform_color, platform_rect)
 
-        # Wallet display
+        # Wallet
         for i in range(collected_items):
             pygame.draw.rect(screen, item_colour, (10 + 25 * i, 40, 20, 20))
         draw_text("Wallet", wallet_font, (0, 0, 0), screen, 20, 10)
