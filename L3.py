@@ -1,7 +1,7 @@
 import pygame
 import sys
 import math
-import L2
+import L4
 
 def run_third_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     clock = pygame.time.Clock()
@@ -242,7 +242,6 @@ def run_third_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
             if keys[pygame.K_e] and not fading_out and not fading_in:
                 fading_out = True  # Start fade out
 
-        # Fading logic
         if fading_in:
             fade_alpha -= fade_speed
             if fade_alpha <= 0:
@@ -253,19 +252,19 @@ def run_third_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
             fade_alpha += fade_speed
             if fade_alpha >= 255:
                 running = False
-                L2.run_second_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items)  # Transition to next level
+                target_items = 5
+                L4.run_cutscene(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, target_items)
+
 
         # Platform rendering
         pygame.draw.rect(screen, platform_color, platform_rect)
         pygame.draw.rect(screen, platform_color_2, platform_rect_2)
 
-        # Display collected items
         for i in range(collected_items):
             pygame.draw.rect(screen, item_color, (10 + 25 * i, 40, 20, 20))
 
         draw_text("Wallet", wallet_font, (0, 0, 0), screen, 20, 10)
 
-        # Floating "E" for interactables
         if show_interact_e:
             draw_text("E", button_font, (0, 0, 0), screen, player_x + player_size // 2, player_y - 20, center=True)
         if show_interact_e_2:
