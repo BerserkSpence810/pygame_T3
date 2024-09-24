@@ -1,0 +1,49 @@
+Game Setup:
+
+1.	Initialize Game Necesities
+	•	Import (pygame, sys, math)
+	•	Initialize Pygame with pygame.init()
+	•	Set screen size and frame rate
+2.	Load Assets
+	•	Load player (blue cube)
+	•	Load enemies: Yellow Cube (velocity: 2, size: 50), Green Cube
+	•	Load interactable objects (red cubes, buttons)
+	•	Load GUI elements (Wallet)
+	•	Set background music and sound effects
+3.	Define Global Variables
+	•	Player health, score, jump speed, movement speed
+	•	Enemy parameters (size, speed, behavior)
+	•	Platform positions and boundaries
+	•	GUI elements (wallet, inventory, buttons)
+	•	Game state variables (fade transitions)
+4.	Classes
+	•	Player Class: Handles movement, jump, item interaction (with "E")
+	•	Enemy Class: Handles movement of yellow and green cubes (yellow follows player, green Larger follows slower)
+	•	Platform Class: Handles platform positioning and collision detection
+	•	GUI Class: Handles money, inventory
+5.	Collision Detection
+	•	Detect collisions between the player and platforms
+	•	Detect interaction (‘E’) with objects like red cubes and the NEXT button
+	•	Detect enemy and player collisions (trigger death cutscene message)
+6.	Game Loop
+	•	Clear screen
+	•	Update player position based on velocity and gravity
+	•	Handle collisions with platforms and enemies
+	•	Update GUI
+	•	Display game objects (player, enemies, platforms, buttons)
+	•	Detect interactions (pick-up-able items, NEXT button)
+	•	Trigger transitions between levels
+7.	Level Setup
+	•	Tutorial Level: Introduce game mechanics
+	•	First Level: Introduce yellow cube enemies and platform navigation
+	•	Second and Third Levels: Expand on mechanics, including green cube enemies and new challenges
+	•	Forth level: Displays different ending depending on collected cube count
+8.	Transitions
+	•	Implement screen fades between title, tutorial, and levels.
+	•	Trigger transitions when the player interacts with the NEXT button or reaches certain objectives
+9.	Death
+	•	Trigger “You got robbed” scene when killed by cubes.
+	•	End after death.
+10.	End of Game
+	•	Define victory conditions
+	•	Reset game state for new playthroughs
