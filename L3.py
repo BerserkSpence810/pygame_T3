@@ -53,7 +53,7 @@ def run_third_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items):
     # Red Cube 2
     item_color_2 = (255, 0, 0)
     item_size_2 = 30
-    special_item_2 = (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT - 220)
+    special_item_2 = (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT - 230)
     items_2 = [special_item_2]
     show_interact_e_2 = False
 
