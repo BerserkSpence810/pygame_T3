@@ -14,7 +14,7 @@ def run_first_level(screen, SCREEN_WIDTH, SCREEN_HEIGHT, collected_items, run_tu
     # Player Settings
     player_color = (0, 128, 255)
     player_size = 50
-    player_x = 50  # Player Start
+    player_x = 50
     player_y = SCREEN_HEIGHT - player_size
     player_velocity = 8
 
