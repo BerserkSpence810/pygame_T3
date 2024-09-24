@@ -1,5 +1,5 @@
 #Assets section.
-import pygame
+#Ending images generated using dalle
 
 class FloatingText: # ChatGPT. Somewhat used as a base
     """Displays floating text with a fade-out effect over a specified duration."""
